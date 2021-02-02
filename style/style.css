@@ -1,0 +1,92 @@
+a:active, a:focus { outline: none; }
+
+input, textarea {outline:none;}
+input:active, textarea:active {outline:none;}
+:focus {outline:none;}
+textarea {resize:none;}
+textarea {resize:vertical;}
+textarea {resize:horizontal;}
+
+
+
+button {
+    padding: 0;
+    border: none;
+    font: inherit;
+    color: inherit;
+    /* отображаем курсор в виде руки при наведении; некоторые
+    считают, что необходимо оставлять стрелочный вид для кнопок */
+    cursor: pointer;
+  }
+
+.slider {
+    text-align: -webkit-center;
+    position: relative;
+}
+
+.slide__style {
+    width: 100%;
+    max-width: 580px;
+    height: auto;
+}
+
+.arrows {
+    cursor: pointer;
+}
+
+.wrapper {
+    margin-top: 40px;
+    width: 600px;
+}
+
+.arrow {
+    width: 40px;
+    height: 40px;
+}
+
+.inner__arrow {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    width: 600px;
+    height: 0px;
+    top: 45%;
+    z-index: 999;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: -o-flex;
+    display: flex;
+    justify-content: space-between;
+}
+
+.slides__fields {
+    transition: all 1s ease 0s
+}
+
+.dot__style {
+    width: 15px;
+    height: 15px;
+    border-radius: 10px;
+    margin-right: 25px;
+    background: #747474;
+}
+
+.dots__active {
+    background: black;
+}
+
+.dots {
+    margin-top: 15px;
+}
+
+.next__arrow {
+    padding-right: 20px;
+}
+.prev__arrow {
+    padding-left: 20px;
+}
+
+
+
+
