@@ -10,8 +10,30 @@ function slider({
     arrowsWrapper,
     slidesToScroll,
     speed,
-    mouseOverDots 
+    mouseOverDots,
+    responsive
 }) {
+
+    responsive.forEach(value => {
+        if (document.documentElement.offsetWidth < value.breackpoint) {
+            const {
+                speedR,
+                intervalR,
+                mouseOverImageR,
+                mouseOverDotsR,
+                slidesToShowR,
+                slidesToScrollR
+            } = value.settings;
+           
+            speed = speedR;
+            interval = intervalR;
+            mouseOverImage = mouseOverImageR;
+            mouseOverDots = mouseOverDotsR;
+            slidesToShow = slidesToShowR;
+            slidesToScroll = slidesToScrollR;
+        }
+    });
+
     const wrapper = document.querySelector(container),
         inner = document.querySelector(fields),
         slides = document.querySelectorAll(slide),
@@ -20,9 +42,10 @@ function slider({
         arrows = document.querySelector(arrowsWrapper),
         width = window.getComputedStyle(wrapper).width;
 
+
     let offset = 0,
         index = 0,
-        userWidth, slidesLength,i;
+        userWidth, slidesLength, i;
 
     userWidth = changeWidth(width) * slidesToShow;
     slidesLength = slides.length - slidesToShow - (slidesToScroll - 1);
@@ -38,12 +61,13 @@ function slider({
     });
 
     arrows.style.width = `${userWidth}px`;
-  
-    
+
+
     //Dots
     const div = document.createElement('div');
+    div.classList.add('div__dots');
     div.style.marginTop = "15px";
-   
+
     for (let i = 0; i <= slidesLength; i++) {
         div.innerHTML += `
         <button class="dot__style" data-count = ${i + 1}></button>
@@ -52,7 +76,8 @@ function slider({
 
     wrapper.append(div);
 
-    const dots = document.querySelectorAll('.dot__style');
+    const dots = document.querySelectorAll('.dot__style'),
+        divDots = document.querySelector('.div__dots');
 
     changeDots(dots, index);
 
@@ -72,7 +97,7 @@ function slider({
     }
 
     function nextSlide() {
-        if (offset === (changeWidth(width) * slidesToScroll)  * (slides.length - slidesToShow - (slidesToScroll - 1))) {
+        if (offset === (changeWidth(width) * slidesToScroll) * (slides.length - slidesToShow - (slidesToScroll - 1))) {
             offset = 0;
         } else {
             offset += (changeWidth(width) * slidesToScroll);
@@ -88,7 +113,7 @@ function slider({
     prev.addEventListener('click', () => {
 
         if (offset === 0) {
-            offset = (changeWidth(width) * slidesToScroll)  * (slides.length - slidesToShow - (slidesToScroll - 1));
+            offset = (changeWidth(width) * slidesToScroll) * (slides.length - slidesToShow - (slidesToScroll - 1));
         } else {
             offset -= (changeWidth(width) * slidesToScroll);
         }
@@ -100,23 +125,39 @@ function slider({
         changeDots(dots, index);
     });
 
+    function mouseOver(selector) {
+        selector.addEventListener('mouseover', () => {
+            clearInterval(i);
+        });
+    }
+
+    function mouseOut(selector) {
+        let check = true;
+
+        selector.addEventListener('mouseout', interval);
+
+        function interval(e) {
+            i = setInterval(() => {
+                nextSlide();
+            }, speed);
+
+            check = false;
+
+            if (!check && mouseOverDots && e.target.matches('button.dot__style')) {
+                selector.removeEventListener('mouseout', interval);
+            }
+        }
+    }
+
     if (interval) {
         //Animation 
-         i = setInterval(() => {
+        i = setInterval(() => {
             nextSlide();
         }, speed);
 
         if (mouseOverImage) {
-            inner.addEventListener('mouseover', (e) => {
-                console.log(e.target);
-                clearInterval(i);
-            });
-
-            inner.addEventListener('mouseout', () => {
-                i = setInterval(() => {
-                    nextSlide();
-                }, 3000);
-            });
+            mouseOver(inner);
+            mouseOut(inner);
         }
     }
 
@@ -124,13 +165,16 @@ function slider({
     wrapper.addEventListener('click', (e) => {
         if (e.target && e.target.getAttribute('data-count')) {
             const count = e.target.getAttribute('data-count');
-            index = count - 1;
+            const arrow = e.target;
 
-            if(mouseOverDots) {
+            index = count - 1;
+            changeDots(dots, index);
+
+            if (mouseOver) {
                 clearInterval(i);
+                mouseOut(arrow);
             }
 
-            changeDots(dots, index);
             offset = (changeWidth(width) * slidesToScroll) * (count - 1);
             inner.style.transform = `translateX(-${offset}px)`;
         }

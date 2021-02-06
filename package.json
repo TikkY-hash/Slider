@@ -1,0 +1,21 @@
+{
+  "name": "slider",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "browserslist": [
+    "> 1%"
+  ],
+  "dependencies": {
+    "babel-loader": "^8.2.2",
+    "core-js": "^3.8.3",
+    "webpack-cli": "^4.4.0",
+    "webpack": "^5.19.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kirill",
+  "license": "ISC"
+}
